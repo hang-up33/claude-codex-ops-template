@@ -167,16 +167,6 @@ if [[ -f CLAUDE.md.template && ! -f CLAUDE.md ]]; then
     fi
 fi
 
-if [[ -d examples/qt6 ]]; then
-    read -r -p "Qt6 用の examples/qt6/ を残しますか？ [Y で残す / n で削除]: " ans
-    if [[ "${ans:-Y}" =~ ^[Nn]$ ]]; then
-        rm -rf examples/qt6
-        # examples/ が空になったらそれも消す
-        rmdir examples 2>/dev/null || true
-        echo "  → examples/qt6/ を削除"
-    fi
-fi
-
 echo ""
 echo "完了。次のステップ："
 echo "  1. CLAUDE.md / README.md にプロジェクト固有の概要・アーキテクチャを追記"

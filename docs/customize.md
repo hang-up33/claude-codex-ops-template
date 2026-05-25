@@ -66,22 +66,17 @@ HTML / Markdown コメント内に置かれている。プロジェクト固有�
 
 ## 不要な資産の削除
 
-### `examples/qt6/`
-
-Qt6 / CMake プロジェクトでない場合は削除してよい。`apply-template.sh` の最後で確認プロンプトが出るので Yes と答える。手動で消す場合：
-
-```sh
-rm -rf examples/qt6
-rmdir examples 2>/dev/null   # 他に何も無ければ examples/ ごと削除
-```
-
 ### `.github/ISSUE_TEMPLATE/`
 
 Issue を使わないプロジェクトでは丸ごと削除して可。
 
 ### `scripts/capture-app-window.sh`
 
-GUI スクリーンショット運用をしないプロジェクト（CLI ツール / バックエンドサービス）では削除可。その場合、`CLAUDE.md` の「動作証跡スクリーンショット運用」セクションも削除する。
+GUI スクリーンショット運用をしないプロジェクト（CLI ツール / バックエンドサービス / Web API 等）では削除可。その場合、`CLAUDE.md` の「動作証跡スクリーンショット運用」セクションも削除する。
+
+### フレームワーク固有のスキル / エージェントを追加したい場合
+
+テンプレ本体は言語 / フレームワーク非依存に保つ方針のため、特定スタック向け（Qt6, Next.js, Rails, Django 等）のスキルやビルドエラー解決エージェントは派生プロジェクト側の `.claude/skills/` / `.claude/agents/` に追加していく。テンプレ本体には逆流させない（[README.md](../README.md) Maintenance セクション参照）。
 
 ## Placeholder 追加の運用
 

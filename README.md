@@ -2,7 +2,7 @@
 
 「**実装は Claude Code、レビューは ChatGPT Codex GitHub App**」運用を新規プロジェクトで即開始するための GitHub Template Repository。
 
-[`hang-up33/hmi-platform`](https://github.com/hang-up33/hmi-platform) で実運用されている `.claude/` 配下のスキル / エージェント、`AGENTS.md`、PR・ブランチ・スクリーンショット運用ルール、汎用補助スクリプトを言語非依存に汎用化したもの。
+[`hang-up33/hmi-platform`](https://github.com/hang-up33/hmi-platform) で実運用されている `.claude/` 配下のスキル / エージェント、`AGENTS.md`、PR・ブランチ・スクリーンショット運用ルール、汎用補助スクリプトを **言語 / フレームワーク非依存** に汎用化したもの。Web / モバイル / バックエンド / CLI / GUI など、`{{BUILD_CMD}}` で完了基準を表現できる任意のプロジェクトに適用できる。
 
 ---
 
@@ -18,11 +18,16 @@
    ```sh
    bash scripts/apply-template.sh
    ```
-   対話で `{{OWNER}}` / `{{REPO}}` / `{{BUILD_CMD}}` 等を聞かれるので答える。完了後、`CLAUDE.md.template` → `CLAUDE.md` のリネームを促されるので Yes。
+   対話で `{{OWNER}}` / `{{REPO}}` / `{{BUILD_CMD}}` 等を聞かれるので答える。`{{BUILD_CMD}}` には言語問わず「完了基準にしたいコマンド」を入れる（`npm run build` / `cargo build` / `go build ./...` / `pytest` / `cmake --build build` 等）。完了後、`CLAUDE.md.template` → `CLAUDE.md` のリネームを促されるので Yes。
 4. **`CLAUDE.md` を埋める**：プロジェクト概要・アーキテクチャ・ビルド手順を追記（テンプレ骨格にコメントで指示が入っている）。
 5. **ChatGPT Codex Web で連携**：[chatgpt.com/codex](https://chatgpt.com/codex) → Settings → GitHub OAuth → 新リポジトリを連携。
 6. **gh CLI 認証**：`gh auth status` で OK か確認。
 7. **最初のダミー PR で疎通確認**：適当な変更を `task/0-smoke` ブランチで PR にして、Codex が日本語コメントを返すか確認。
+8. **（任意）Issue → PR 自動化を有効化**：
+   - Settings → Secrets and variables → Actions に `ANTHROPIC_API_KEY` を登録
+   - Settings → Actions → General で "Read and write permissions" と "Allow GitHub Actions to create and approve pull requests" を ON
+   - ラベル `claude` を作成
+   - Issue に `claude` ラベルを付けるか本文に `@claude` を含めると [.github/workflows/claude-issue-to-pr.yml](.github/workflows/claude-issue-to-pr.yml) が起動し、Claude が実装ブランチと PR を自動生成する。PR 提出後は既存の Codex レビューループに乗る。
 
 ---
 
@@ -40,15 +45,13 @@
 
 .github/
 ├── PULL_REQUEST_TEMPLATE.md            # PR 本文の雛形（Summary / 変更点 / Test plan / Codex 向け補足）
-└── ISSUE_TEMPLATE/                     # 任意
+├── ISSUE_TEMPLATE/                     # 任意
+└── workflows/
+    └── claude-issue-to-pr.yml          # `claude` ラベル / @claude メンションで Issue→PR を自動化
 
 scripts/
 ├── apply-template.sh                   # placeholder 一括置換
-└── capture-app-window.sh               # macOS のウィンドウキャプチャ（GUI アプリのスクショ用）
-
-examples/
-└── qt6/                                # Qt6 + CMake プロジェクト用の参考実装
-                                        # （不要なら apply-template.sh の最後で削除可）
+└── capture-app-window.sh               # macOS のウィンドウキャプチャ（GUI アプリのスクショ用 / 不要なら削除可）
 
 docs/
 ├── setup.md                            # 初回セットアップ詳細
@@ -89,7 +92,8 @@ Claude (codex-pr SKILL の自走ループ)
 
 - **placeholder 一覧**は [docs/customize.md](docs/customize.md) 参照。
 - **`build-error-resolver` の「既知の罠リスト」** は最初は空。プロジェクトで踏んだ罠を `kaizen-close` 経由で追記していくと、本エージェントが早く解決できるようになる。
-- **Qt6 / CMake プロジェクトでない場合**は `examples/qt6/` を丸ごと削除して可（`apply-template.sh` の最後で確認プロンプトが出る）。
+- **CLI / バックエンド等で GUI スクショ運用が不要な場合**は `scripts/capture-app-window.sh` を削除し、`CLAUDE.md` の「動作証跡スクリーンショット運用」セクションも削除する。
+- **フレームワーク固有のスキル / エージェント**（例：CMake ビルドの罠、Next.js の SSR ハンドリング、Rails マイグレーション手順 等）はテンプレ本体には含めず、`apply-template.sh` 適用後に各派生プロジェクトの `.claude/` 配下に追加していく。
 - **CI を足したい場合**は `.github/workflows/` を任意に追加。本テンプレ自体は CI を強制しない。
 
 ---
@@ -102,7 +106,7 @@ Claude (codex-pr SKILL の自走ループ)
 
 | 上流の変更 | テンプレへの取り込み | 理由 |
 |---|---|---|
-| Qt / CMake / QML の罠 | **取り込まない**（`examples/qt6/` にのみ反映） | プロジェクト固有 |
+| 特定の言語 / フレームワーク（Qt, Next.js, Rails 等）固有の罠 | **取り込まない** | プロジェクト固有 |
 | Codex 自走ループの判定ロジック改善（`codex-pr` SKILL 手順 7） | **取り込む** | 全プロジェクトに価値 |
 | `kaizen-close` の反映先選定ルール変更 | **取り込む** | 全プロジェクトに価値 |
 | PR 本文フォーマットの改善 | **取り込む**（PR テンプレと `codex-pr` SKILL 手順 5 を同期） | 全プロジェクトに価値 |
@@ -114,7 +118,7 @@ Claude (codex-pr SKILL の自走ループ)
 
 1. hmi-platform 側の該当 PR をレビューし、汎用化可能な箇所を特定
 2. 本テンプレリポジトリで `task/sync-<topic>` ブランチを切る
-3. 該当ファイルを汎用化（リテラル値 → placeholder 化、Qt 固有例は `examples/qt6/` に隔離）
+3. 該当ファイルを汎用化（リテラル値 → placeholder 化。フレームワーク固有の例示やコマンドは持ち込まない）
 4. 既存利用者への影響を `docs/customize.md` の changelog セクションに追記
 5. PR 作成 → Codex レビュー → マージ
 

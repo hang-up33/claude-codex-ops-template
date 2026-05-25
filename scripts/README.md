@@ -11,7 +11,7 @@
 
 詳細は [../docs/setup.md](../docs/setup.md) と [../docs/customize.md](../docs/customize.md) を参照。
 
-対話モードと非対話モード（CLI フラグ）の両方をサポート。完了後に placeholder 残存検査と仕上げプロンプト（`CLAUDE.md.template` のリネーム / `examples/qt6/` の削除確認）が走る。
+対話モードと非対話モード（CLI フラグ）の両方をサポート。完了後に placeholder 残存検査と仕上げプロンプト（`CLAUDE.md.template` のリネーム）が走る。
 
 ## capture-app-window.sh
 
