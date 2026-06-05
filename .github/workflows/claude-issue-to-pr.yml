@@ -18,12 +18,14 @@ on:
 jobs:
   implement:
     # 起動条件:
-    #  - Issue に `claude` ラベルが付いた瞬間
-    #  - Issue 新規作成時、本文に @claude 言及あり
+    #  - Issue に `claude` ラベルが後から付いた瞬間（labeled）
+    #  - Issue 新規作成時、本文に @claude 言及あり、または作成時点で `claude` ラベル付き
+    #    （ISSUE_TEMPLATE の labels: ["claude"] のように作成時に付くラベルは labeled を
+    #     発火せず opened ペイロードに含まれるため、opened 側でもラベルを判定する）
     #  - Issue / PR コメントで @claude 言及あり
     if: >-
       (github.event_name == 'issues' && github.event.action == 'labeled' && github.event.label.name == 'claude') ||
-      (github.event_name == 'issues' && github.event.action == 'opened' && contains(github.event.issue.body, '@claude')) ||
+      (github.event_name == 'issues' && github.event.action == 'opened' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.labels.*.name, 'claude'))) ||
       (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude'))
     runs-on: ubuntu-latest
     permissions:
