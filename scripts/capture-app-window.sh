@@ -5,9 +5,9 @@
 #   scripts/capture-app-window.sh <process-name> <output-path>
 #
 # 例:
-#   ./build/Editor/hmi_editor.app/Contents/MacOS/hmi_editor &
+#   ./build/MyApp.app/Contents/MacOS/my_app &
 #   sleep 2
-#   scripts/capture-app-window.sh hmi_editor Docs/screenshots/task-4-button.png
+#   scripts/capture-app-window.sh my_app docs/screenshots/example.png
 #
 # 仕組み:
 #   1. Swift で CGWindowListCopyWindowInfo を呼び、対象プロセスのウィンドウ ID を取得

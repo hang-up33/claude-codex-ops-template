@@ -76,7 +76,7 @@ GUI スクリーンショット運用をしないプロジェクト（CLI ツー
 
 ### フレームワーク固有のスキル / エージェントを追加したい場合
 
-テンプレ本体は言語 / フレームワーク非依存に保つ方針のため、特定スタック向け（Qt6, Next.js, Rails, Django 等）のスキルやビルドエラー解決エージェントは派生プロジェクト側の `.claude/skills/` / `.claude/agents/` に追加していく。テンプレ本体には逆流させない（[README.md](../README.md) Maintenance セクション参照）。
+テンプレ本体は言語 / フレームワーク非依存に保つ方針のため、特定スタック向け（Next.js, Rails, Django, Flutter 等）のスキルやビルドエラー解決エージェントは派生プロジェクト側の `.claude/skills/` / `.claude/agents/` に追加していく。テンプレ本体には逆流させない（[README.md](../README.md) メンテナンス / バージョニング セクション参照）。
 
 ## Placeholder 追加の運用
 
