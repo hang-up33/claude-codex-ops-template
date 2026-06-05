@@ -2,7 +2,7 @@
 
 「**実装は Claude Code、レビューは ChatGPT Codex GitHub App**」運用を新規プロジェクトで即開始するための GitHub Template Repository。
 
-[`hang-up33/hmi-platform`](https://github.com/hang-up33/hmi-platform) で実運用されている `.claude/` 配下のスキル / エージェント、`AGENTS.md`、PR・ブランチ・スクリーンショット運用ルール、汎用補助スクリプトを **言語 / フレームワーク非依存** に汎用化したもの。Web / モバイル / バックエンド / CLI / GUI など、`{{BUILD_CMD}}` で完了基準を表現できる任意のプロジェクトに適用できる。
+`.claude/` 配下のスキル / エージェント、`AGENTS.md`、PR・ブランチ・スクリーンショット運用ルール、汎用補助スクリプトを **言語 / フレームワーク非依存** にまとめたもの。Web / モバイル / バックエンド / CLI / GUI など、`{{BUILD_CMD}}` で完了基準を表現できる任意のプロジェクトに適用できる。
 
 ---
 
@@ -98,40 +98,16 @@ Claude (codex-pr SKILL の自走ループ)
 
 ---
 
-## Maintenance — hmi-platform からの取り込み運用
-
-本テンプレートは [`hang-up33/hmi-platform`](https://github.com/hang-up33/hmi-platform) を元に切り出されているため、上流で新しい kaizen / 罠 / ワークフロー改善が発生した時に、**汎用化に値するもの**を本テンプレ側にも反映していく。
-
-### 取り込みの判断基準（hmi-platform 側で kaizen を発見した時）
-
-| 上流の変更 | テンプレへの取り込み | 理由 |
-|---|---|---|
-| 特定の言語 / フレームワーク（Qt, Next.js, Rails 等）固有の罠 | **取り込まない** | プロジェクト固有 |
-| Codex 自走ループの判定ロジック改善（`codex-pr` SKILL 手順 7） | **取り込む** | 全プロジェクトに価値 |
-| `kaizen-close` の反映先選定ルール変更 | **取り込む** | 全プロジェクトに価値 |
-| PR 本文フォーマットの改善 | **取り込む**（PR テンプレと `codex-pr` SKILL 手順 5 を同期） | 全プロジェクトに価値 |
-| ブランチ命名 / マージ戦略の変更 | **取り込む**（placeholder を介して反映） | 全プロジェクトに価値 |
-| MVP タスク順 / フェーズ管理の具体内容 | **取り込まない**（プロジェクト固有） | hmi-platform 専用 |
-| 新規 placeholder の追加 | **取り込む**（`scripts/apply-template.sh` と `docs/customize.md` も同期） | テンプレの拡張 |
-
-### 取り込み手順
-
-1. hmi-platform 側の該当 PR をレビューし、汎用化可能な箇所を特定
-2. 本テンプレリポジトリで `task/sync-<topic>` ブランチを切る
-3. 該当ファイルを汎用化（リテラル値 → placeholder 化。フレームワーク固有の例示やコマンドは持ち込まない）
-4. 既存利用者への影響を `docs/customize.md` の changelog セクションに追記
-5. PR 作成 → Codex レビュー → マージ
-
-### バージョニング
+## メンテナンス / バージョニング
 
 - 本テンプレリポジトリは **タグでリリースを切る**（例：`v0.1.0`, `v0.2.0`）
 - 大きな破壊的変更（placeholder の rename 等）は minor バージョンを上げる
+- 汎用化に値する kaizen / 罠 / ワークフロー改善が見つかった時は、`task/sync-<topic>` ブランチで反映し、影響を `docs/customize.md` の changelog に追記する（フレームワーク固有の例示やコマンドは持ち込まず、リテラル値は placeholder 化する）
 - 既存の派生プロジェクトは "Use this template" 後にテンプレと切り離されるため、新版を取り込みたい場合は手動で差分を当てる（テンプレ更新の自動同期機構は GitHub には無いため）
 
 ---
 
 ## 関連リンク
 
-- 元リポジトリ：[hang-up33/hmi-platform](https://github.com/hang-up33/hmi-platform)
 - ChatGPT Codex：[chatgpt.com/codex](https://chatgpt.com/codex)
 - Claude Code：[claude.com/claude-code](https://claude.com/claude-code)
